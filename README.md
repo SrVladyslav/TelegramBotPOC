@@ -27,6 +27,7 @@ source .venv/Scripts/activate
 ```
 pip install -r requirements.txt
 ```
+> **_NOTE:_** It might take some time, be patient 😅.
 
 ### Obtain telegram token with BotFather
 In order to use the bot live, you need a Telegranm token, which is used to create your own Bot in Telegram. <br>
@@ -104,3 +105,7 @@ Press Ctrl-C to stop.
  ┣ 📜requirements.txt
  ┗ 📜__init__.py
 ```
+
+## External useful links
+- [python-telegram-bot](https://docs.python-telegram-bot.org/en/v21.1.1/index.html) documentation page.
+- [python-soundfile](https://python-soundfile.readthedocs.io/en/0.11.0/#) documentation page.
