@@ -31,4 +31,4 @@ Press Ctrl-C to stop.
     Also no information about the userid will be included (it would be the same 
     code like in the audio part, if were needed).
 
-
+> **_NOTE:_** I'm using Haar Cascade Algorithm included in cv2 since is pretty good for the given task, it's trading precision for time. If we have a good server, we can user some ML models instead here, for example, see: [insightface.ai](https://insightface.ai/).
