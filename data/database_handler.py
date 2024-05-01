@@ -6,7 +6,7 @@ class DatabaseHandler:
         Set of database functions to handle all its life cicle with sqlite3
     """
     def __init__(self):
-        self._db_prod_path = './data/RDBMS/prod.db'
+        self._db_prod_path = './data/db/database_prod.db'
 
     def generate_uuid(self):
         """ Generates new UUID so can be used as ID en some table """
@@ -40,16 +40,14 @@ class DatabaseHandler:
             """)
 
             # Create the table to store Image data
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS Images (
-                    i_id CHAR(36) PRIMARY KEY NOT NULL,
-                    i_name VARCHAR,
-                    i_path VARCHAR,
-                    i_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    u_id INTEGER,
-                    FOREIGN KEY (u_id) REFERENCES Users (u_id) ON DELETE SET NULL
-                )
-            """)
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS Images (
+            #         i_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            #         i_path VARCHAR,
+            #         u_id INTEGER,
+            #         FOREIGN KEY (u_id) REFERENCES Users (u_id) ON DELETE SET NULL
+            #     )
+            # """)
             db_conn.commit()
 
     # =========================================================================================== CREATE
@@ -59,7 +57,6 @@ class DatabaseHandler:
             cursor = db_conn.cursor()
             cursor.execute("INSERT OR IGNORE INTO Users (u_id) VALUES (?)", (user_id,))
             db_conn.commit()
-
 
     def postUserAudio(self, user_id:int) -> str:
         """
@@ -94,7 +91,6 @@ class DatabaseHandler:
 
         return a_msg_name
     
-    
     # =========================================================================================== GET 
     def getUserAudioCount(self, user_id:int) -> int:
         """ Makes a GET request to the DB that returns the user's Audio messages number, 
@@ -111,11 +107,3 @@ class DatabaseHandler:
             db_conn.commit()
             
             return user_audios_count
-
-
-    def _delete_table(self, db_table:str):
-        """Drops given table, USE ONLY IN DEV MODE"""
-        with sqlite3.connect(self._db_prod_path) as db_conn:
-            cursor = db_conn.cursor()
-            cursor.execute("DROP TABLE IF EXISTS " + db_table);
-            db_conn.commit()
