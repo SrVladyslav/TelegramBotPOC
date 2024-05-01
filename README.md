@@ -7,16 +7,35 @@
 - Determines whether there is a face in the photos being sent or not, saves only those where it is
 
 
-## Start the bot
+## Steps to start the bot
+
 ### Install venv
 ```
 python -m venv .venv
 source .venv/Scripts/activate
 ```
+
 ### Install dependencies
 ```
 pip install -r requirements.txt
 ```
+
+### Obtain telegram token with BotFather
+In order to use the bot live, you need a Telegranm token, which is used to create your own Bot in Telegram. <br>
+
+Follow the steps to obtain yours from scratch:
+
+1. Search for `BotFather` in the Telegram search section.
+2. Click on the `Start` button.`
+3. Type `/newbot` and press enter to create your own bot. Then you will be asked to provide the bot name and username. To choose a username, you sould know that it must end with the word `bot` or `_bot`.
+> **_NOTE:_** It is not possible to change the bot username later!
+4. If BotFather approves your username, you will be prompted with a message that contains `YOUR_TELEGRAM_BOT_TOKEN` in it, copy this token.
+
+
+```
+echo "TELEGRAM_BOT_TOKEN='<YOUR_TELEGRAM_BOT_TOKEN here>'" > .env
+```
+
 ### Run bot
 ```
 python main.py
