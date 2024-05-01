@@ -1,20 +1,30 @@
 # Develop a Telegram / WhatsApp Bot that can:
 
-Tasks to do:
+## Tasks to do:
 - Save audio messages from dialogues to a database (DBMS or disk) by user IDs.
    Audio should be converted to wav format with a sampling rate of 16kHz. Recording format: uid -> [audio_message_0, audio_message_1, ..., audio_message_N].
 
 - Determines whether there is a face in the photos being sent or not, saves only those where it is
 
-### Run bot
+
+## Start the bot
+### Install venv
 ```
+python -m venv .venv
 source .venv/Scripts/activate
 ```
+### Install dependencies
+```
+pip install -r requirements.txt
+```
+### Run bot
 ```
 python main.py
 ```
 Press Ctrl-C to stop.
 
+
+## Implementations
 ### Audio implementation
 - Here is a [notebook](https://github.com/SrVladyslav/TelegramBotPOC/blob/main/dbVisualizer.ipynb) with readings from the DB.
 - [Database handler](https://github.com/SrVladyslav/TelegramBotPOC/blob/main/data/database_handler.py) code here.
