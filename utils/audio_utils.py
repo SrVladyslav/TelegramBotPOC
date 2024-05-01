@@ -7,8 +7,8 @@ class AudioUtils:
     def __init__(self):
         self._BASE_DIR = os.path.dirname( os.path.dirname(os.path.realpath(__file__)) )
         self._audio_data_path = self._BASE_DIR + '/data/audio_data/'
-        self._new_sampling_rate = 16000     
-        self._dh = DatabaseHandler()                                              # Sampling rate of 16kHz
+        self._new_sampling_rate = 16000 # Sampling rate of 16kHz  
+        self._dh = DatabaseHandler()                                       
 
     def createNewFolder(self, folder_path:str):
         try:
@@ -18,7 +18,12 @@ class AudioUtils:
             print(f'Error on folder creation {folder_path}: {e}')
 
     async def processAudio(self, audio_data:bytearray, user_id:int):
-        """"""
+        """Process audio data and save it in the designated user's audio folder.
+
+        Args:
+            audio_data (bytearray): Raw audio data to be processed and saved.
+            user_id (int): Unique Telegram identifier of the user associated with the audio.
+        """
         # Create new Audio item in the DB and return the new User's audio name
         user_audio_filename = self._dh.postUserAudio(user_id)
 
@@ -34,12 +39,14 @@ class AudioUtils:
         # NOTE: In the prod case it would be good to also preprocess the audio,
         # for example, apply the Anti-Aliasing filter, this could be done with Scipy.
         data, samplerate = sf.read(io.BytesIO(audio_data))
-        print("New filename: ", user_audio_path, 'Sampling: ', samplerate)
-
+        # Store an audio with a sampling rate of 16kHz
         sf.write(user_audio_path, data, self._new_sampling_rate)
-        self.get_sample_rate(user_audio_path)
 
+        # self.get_sample_rate(user_audio_path) # Check      
+
+    # DEVELOPMENT PURPOSES ======================================================================
     def get_sample_rate(self, path:str):
+        """Check function to obtain the sample rate from audio of the given path"""
         data, samplerate = sf.read(path)
         print("New RATE: ",samplerate)
 

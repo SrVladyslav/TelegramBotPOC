@@ -77,6 +77,7 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return 
     
     iu = ImageUtils()
+    
     # for photo_obj in update.message.photo:
     photo_obj = update.message.photo[-1]
     new_file = await context.bot.get_file(photo_obj.file_id)
@@ -108,21 +109,29 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 def main():
     # --------------------------------------------------------------------------------------- Database initialization
     db = DatabaseHandler()                                                                  # Database functions
-    db.create_tables()                                                                      # Created tables: Users, Audios, Images               
-
-    # ====================================================================================== Start the SrVladyslav Bot
-    print("Starting the SrVladyslav Bot")
-    telegram_bot = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
-    # --------------------------------------------------------------------------------------- Adding the bot handlers
-    telegram_bot.add_handler(CommandHandler("start", start))                                # /start handler
-    # telegram_bot.add_handler(CommandHandler("adb", audioDBCount))                           # /adb   returns the Audio Db count for your ID, (HELPER)
+    try:
+        db.create_tables()                                                                  # Created tables: Users, Audios, Images               
     
-    telegram_bot.add_handler(MessageHandler(filters.VOICE, audio_message))                  # Audio filtering
-    telegram_bot.add_handler(MessageHandler(filters.PHOTO, image_message))                  # Image filtering
-    # --------------------------------------------------------------------------------------- Run the bot until Ctrl-C is pressed
-    print("The bot is running... Press Ctrl-C to stop.")
-    telegram_bot.run_polling(allowed_updates=Update.ALL_TYPES)
-
+    except Exception as db_error:
+        print(f"Error initializing database: {db_error}")
+        return
+    
+    # ====================================================================================== Start the SrVladyslav Bot
+    try:
+        print("Starting the SrVladyslav Bot")
+        telegram_bot = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+        # ---------------------------------------------------------------------------------- Adding the bot handlers
+        telegram_bot.add_handler(CommandHandler("start", start))                           # /start handler
+        # telegram_bot.add_handler(CommandHandler("adb", audioDBCount))                    # /adb   returns the Audio Db count for your ID, (HELPER)
+        
+        telegram_bot.add_handler(MessageHandler(filters.VOICE, audio_message))             # Audio filtering
+        telegram_bot.add_handler(MessageHandler(filters.PHOTO, image_message))             # Image filtering
+        # ---------------------------------------------------------------------------------- Run the bot until Ctrl-C is pressed
+        print("The bot is running... Press Ctrl-C to stop.")
+        telegram_bot.run_polling(allowed_updates=Update.ALL_TYPES)
+        
+    except Exception as e:
+        print(f"An error occurred while initializing the bot: {e}")
 
 if __name__ == '__main__':
     main()
