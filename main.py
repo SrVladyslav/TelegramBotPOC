@@ -13,19 +13,12 @@ TELEGRAM_BOT_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN')
 IMAGE_DATA_PATH = './data/image_data/'
 
 # =========================================================================================== BOT FUNCTION HANDLERS
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /start is issued."""
-    user = update.effective_user
-    await update.message.reply_html(
-        rf"Hi {user.mention_html()}!",
-        reply_markup=ForceReply(selective=True),
-    )
-
 async def audioDBCount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Check the DB Audio Count for your ID."""
     db = DatabaseHandler()          
     res = f'We have {db.getUserAudioCount(update.effective_user.id)} audios from you'              
     await update.message.reply_text(res)
+
 
 async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Receive an audio message, changes the sampling rate to 16kHz and 
@@ -53,6 +46,7 @@ async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await au.processAudio(audio_data=audio_data, user_id=user_id)
     await update.message.reply_text("Let's check this audio!")
 
+
 async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Determines whether there is a face in the photos being sent or not, 
     saves only those where it is.
@@ -77,7 +71,7 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return 
     
     iu = ImageUtils()
-    
+
     # for photo_obj in update.message.photo:
     photo_obj = update.message.photo[-1]
     new_file = await context.bot.get_file(photo_obj.file_id)
@@ -105,6 +99,7 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     else:
         await update.message.reply_text("Wow, thanks!")
 
+
 # =========================================================================================== MAIN APP
 def main():
     # --------------------------------------------------------------------------------------- Database initialization
@@ -121,9 +116,7 @@ def main():
         print("Starting the SrVladyslav Bot")
         telegram_bot = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
         # ---------------------------------------------------------------------------------- Adding the bot handlers
-        telegram_bot.add_handler(CommandHandler("start", start))                           # /start handler
         # telegram_bot.add_handler(CommandHandler("adb", audioDBCount))                    # /adb   returns the Audio Db count for your ID, (HELPER)
-        
         telegram_bot.add_handler(MessageHandler(filters.VOICE, audio_message))             # Audio filtering
         telegram_bot.add_handler(MessageHandler(filters.PHOTO, image_message))             # Image filtering
         # ---------------------------------------------------------------------------------- Run the bot until Ctrl-C is pressed
@@ -132,6 +125,7 @@ def main():
         
     except Exception as e:
         print(f"An error occurred while initializing the bot: {e}")
+
 
 if __name__ == '__main__':
     main()
