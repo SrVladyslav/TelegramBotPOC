@@ -17,6 +17,7 @@ Press Ctrl-C to stop.
 
 ### Audio implementation
 - Here is a [notebook](https://github.com/SrVladyslav/TelegramBotPOC/blob/main/dbVisualizer.ipynb) with readings from the DB.
+- [Database handler](https://github.com/SrVladyslav/TelegramBotPOC/blob/main/data/database_handler.py) code here.
 - [Audio processing](https://github.com/SrVladyslav/TelegramBotPOC/blob/main/utils/audio_utils.py) main code.
 
 ### Image implementation
