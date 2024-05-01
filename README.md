@@ -85,7 +85,7 @@ Press Ctrl-C to stop.
  ┃ ┃ ┃ ┗ 📜audio_message_N.wav
  ┃ ┃ ┗ 📜.gitkeep
  ┃ ┣ 📂db
- ┃ ┃ ┗ 📜database_prod.db                            # Will be created after running python main.py
+ ┃ ┃ ┗ 📜database_prod.db                            # DB Tables will be created after running python main.py
  ┃ ┣ 📂image_data                                    # The images which have some face on it will be stored here
  ┃ ┃ ┣ 📜.gitkeep
  ┃ ┃ ┗ 📜image_0.jpg
