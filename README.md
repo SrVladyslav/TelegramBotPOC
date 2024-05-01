@@ -109,3 +109,4 @@ Press Ctrl-C to stop.
 ## External useful links
 - [python-telegram-bot](https://docs.python-telegram-bot.org/en/v21.1.1/index.html) documentation page.
 - [python-soundfile](https://python-soundfile.readthedocs.io/en/0.11.0/#) documentation page.
+- [librosa.load](https://librosa.org/doc/0.10.1/generated/librosa.load.html) was used to read the audio data and automatically resample to 16kHz.
