@@ -10,6 +10,12 @@ Develop a Telegram Bot that can:
 
 ## Steps to start the bot
 
+## Clone this repo
+Go to the folder where you want to save this bot and type:
+```
+git clone https://github.com/SrVladyslav/TelegramBotPOC.git
+```
+
 ### Install venv
 ```
 python -m venv .venv
