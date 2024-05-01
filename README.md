@@ -1,10 +1,13 @@
-# Develop a Telegram / WhatsApp Bot that can:
+# Telegram bot for storing audio and images 
+
+![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white) ![OpenCV](https://img.shields.io/badge/opencv-%23white.svg?style=for-the-badge&logo=opencv&logoColor=white) 	![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white) ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 ## Tasks to do:
+Develop a Telegram / WhatsApp Bot that can:
 - Save audio messages from dialogues to a database (DBMS or disk) by user IDs.
-   Audio should be converted to wav format with a sampling rate of 16kHz. Recording format: uid -> [audio_message_0, audio_message_1, ..., audio_message_N].
+   Audio should be converted to wav format with a **sampling rate of 16kHz**. Recording format: `uid -> [audio_message_0, audio_message_1, ..., audio_message_N]`.
 
-- Determines whether there is a face in the photos being sent or not, saves only those where it is
+- Determines whether there **is a face in the photos** being sent or not, saves only those where it is
 
 
 ## Steps to start the bot
