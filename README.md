@@ -51,6 +51,9 @@ python main.py
 ```
 Press Ctrl-C to stop.
 
+### Considerations before production 🤗
+- Implement a connection to a remote database (e.g. [RDS](https://aws.amazon.com/es/rds/) + [S3](https://aws.amazon.com/es/s3/)).
+- Implement a [logger](https://www.geeksforgeeks.org/logging-in-python/) to keep track of everything that happens in the program.
 
 ## Implementations
 ### Audio implementation
