@@ -15,7 +15,7 @@ class DatabaseHandler:
     # =========================================================================================== CREATE
     def create_tables(self):
         """ 
-            This command creates a production DB if this does not exist
+        This command creates a production DB if this does not exist
         """
         try:
             with sqlite3.connect(self._db_prod_path) as db_conn:
@@ -50,7 +50,8 @@ class DatabaseHandler:
             print(f"Error creating tables: {e}")
 
     def postNewUser(self, user_id:int):
-        """Create new user with the given user_id in the DB if this does not exist
+        """
+        Create new user with the given user_id in the DB if this does not exist
         
         Args:
             user_id (int): The user ID which is also the Telegram UID.
@@ -66,31 +67,36 @@ class DatabaseHandler:
 
     def postUserAudio(self, user_id:int) -> str:
         """
-            Posts a new audio message for a specified user into the database.
+        Posts a new audio message for a specified user into the database.
 
-            This function generates a unique audio message ID (`a_id`) and determines the
-            next sequential audio message name (`a_name`) based on the current audio count
-            associated with the given user ID (`user_id`). The audio message is inserted
-            into the 'Audios' table in the database.
+        This function generates a unique audio message ID (`a_id`) and determines the
+        next sequential audio message name (`a_name`) based on the current audio count
+        associated with the given user ID (`user_id`). The audio message is inserted
+        into the 'Audios' table in the database.
 
-            Args:
-                user_id (int): The user ID associated with the audio message.
+        Args:
+            user_id (int): The user ID associated with the audio message.
 
-            Returns:
-                str: The name of the newly created audio message (`a_name`).
-            
-            Note:
-                Because this function uses an SQLite database to store and manage audio data
-                locally (not in the cloud), it determines the next sequential ID for audio
-                messages within the database. This approach ensures each audio message is
-                uniquely identified and ordered chronologically within the database, also ensures 
-                scalability because in scenarios with a large number of audio files, directly 
-                counting files in the folder (the other approach) could be inefficient and time-consuming.
+        Returns:
+            str: The name of the newly created audio message (`a_name`). If error, returns 'NULL'
+        
+        Note:
+            Because this function uses an SQLite database to store and manage audio data
+            locally (not in the cloud), it determines the next sequential ID for audio
+            messages within the database. This approach ensures each audio message is
+            uniquely identified and ordered chronologically within the database, also ensures 
+            scalability because in scenarios with a large number of audio files, directly 
+            counting files in the folder (the other approach) could be inefficient and time-consuming.
         """
         # Create the user if this does not exist
         self.postNewUser(user_id=user_id)
         # Obtain the user Audio count
         next_audio_id = self.getUserAudioCount(user_id=user_id)
+
+        # Abort execution in case of DB fault
+        if next_audio_id == -1:
+            return 'NULL'
+
         # Create the new audio message name
         a_msg_name = f'audio_message_{next_audio_id}'
         # Obtain new Audio Path
@@ -109,18 +115,23 @@ class DatabaseHandler:
                 db_conn.commit()
         
         except sqlite3.Error as e:
-            print(f"Error inserting audi: {e}")
+            # Log: Error inserting audio
+            print(f"Error inserting audio: {e}")
+            # We shouldn't save the audio file if we don't have its record in the DB
+            return 'NULL'
 
         return a_msg_name
     
     # =========================================================================================== GET: Just for checking purposes
     def getUserAudioCount(self, user_id:int) -> int:
-        """ Makes a GET request to the DB that returns the user's Audio messages number, 
-            useful to obtain the next audio N for the audio name "audio_message_N"
+        """ 
+        Makes a GET request to the DB that returns the user's Audio messages number, 
+        useful to obtain the next audio N for the audio name "audio_message_N"
         
         Args:
             user_id (int): The user ID in Telegram, which is also used in our file management
-        Returns: (int)
+        Returns: 
+            int: The count of audio messages for the given user ID.
         """
         try:
             with sqlite3.connect(self._db_prod_path) as db_conn:
@@ -130,5 +141,8 @@ class DatabaseHandler:
                 db_conn.commit()
                 
                 return user_audios_count
+            
         except sqlite3.Error as e:
-            print(f"Error couting audios: {e}")
+            # Log: Error couting audios 
+            print(f"Error couting audios: {e}") 
+            return -1 # Return a default value (-1) in case of error

@@ -1,4 +1,5 @@
 from data.database_handler import DatabaseHandler
+from utils.audio_utils import AudioUtils
 import numpy as np
 import cv2
 import os 
@@ -15,6 +16,10 @@ class ImageUtils:
         """
         if not os.path.isdir(self._audio_data_path):
             print(f"Error: '{self._audio_data_path}' is not a valid directory.")
+            # If there is no directory with this path, try to create one
+            is_created = AudioUtils().createNewFolder(self._audio_data_path)
+            if is_created:
+                return 0 # If created, the first count is zero
             return -1
         return len(os.listdir(self._audio_data_path)) - 1
     
@@ -68,18 +73,29 @@ class ImageUtils:
 
         Returns:
             bool: True if the image has faces, False otherwise.
+        Note:
+            The min size is (30,30), since we will not be looking for faces in very small areas, 
+            if that were the case, then we should set some smaller window rate. 
+            Yet (30,30) still showing god results.
         """
-        haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-        faces_info = haar_cascade.detectMultiScale(
-            gray_img, 
-            scaleFactor=scale_factor, 
-            minNeighbors=min_neighbors, # Higher the value, less will be the number of FP. However, there is a chance of missing some unclear face traces.
-            minSize=min_size
-        )
-        if len(faces_info) > 0:
-            return True 
-        return False
-    
+        try:
+            haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+            faces_info = haar_cascade.detectMultiScale(
+                gray_img, 
+                scaleFactor=scale_factor, 
+                minNeighbors=min_neighbors, # Higher the value, less will be the number of FP. However, there is a chance of missing some unclear face traces.
+                minSize=min_size
+            )
+            if len(faces_info) > 0:
+                return True 
+            return False
+        
+        except Exception as e:
+            # Log: Face detector failed
+            print(f'Face detector failed: {e}')
+            # In case of failure, we will simply skip this image.
+            return False
+
     async def processImage(self, img:bytearray) -> bool:
         """Process the input image to enhance features for face detection using Haar Cascade.
 

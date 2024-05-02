@@ -11,7 +11,7 @@ class AudioUtils:
         self._new_sampling_rate = 16000 # Sampling rate of 16kHz  
         self._dh = DatabaseHandler()                                       
 
-    def createNewFolder(self, folder_path:str):
+    def createNewFolder(self, folder_path:str) -> bool:
         """Create a new folder at the specified path if it does not already exist.
 
         Args:
@@ -22,9 +22,11 @@ class AudioUtils:
         """
         try:
             os.makedirs(folder_path, exist_ok=True)
+            return True
         except OSError as e:
             # Log: Error on folder creation.
             print(f'Error on folder creation {folder_path}: {e}')
+            return False
 
     async def processAudio(self, audio_data:bytearray, user_id:int):
         """Process audio data and save it in the designated user's audio folder.
@@ -46,6 +48,11 @@ class AudioUtils:
         self.createNewFolder(usr_audio_folder_path)
         # Create new Audio item record in the DB and return the new User's next audio filename
         user_audio_filename = self._dh.postUserAudio(user_id)
+
+        # Abort if we fail to create an audio record in the database
+        if user_audio_filename == 'NULL':
+            return None
+
         user_audio_path = f'{usr_audio_folder_path}/{user_audio_filename}.wav'
         # Store the audio in the corresponding PATH, with a sampling rate of 16kHz and in .WAV format
         sf.write(user_audio_path, audio_wave, self._new_sampling_rate, subtype='PCM_24')
@@ -59,8 +66,11 @@ class AudioUtils:
     # DEVELOPMENT PURPOSES ONLY ======================================================================
     def get_sample_rate(self, path:str):
         """Check function to obtain the sample rate from audio of the given path"""
-        data, samplerate = sf.read(path)
-        print("New Sampling RATE: ",samplerate)
+        try:
+            data, samplerate = sf.read(path)
+            print(f'New Sampling RATE: {samplerate}')
+        except Exception as e:
+            print(f'Error: {e}')
     
     def store_raw_audio(self, audio_data:bytearray, path:str):
         """Stores the original audio in the given path
@@ -69,8 +79,11 @@ class AudioUtils:
             audio_data (bytearray): The original audio data
             path (str): path, including the name, for this audio
         """
-        audio_wave, samplerate = librosa.load(io.BytesIO(audio_data), sr=None, res_type='soxr_hq')
-        sf.write(path, audio_wave, samplerate, subtype='PCM_24')
-        print("Sample rate: ", samplerate)
+        try:
+            audio_wave, samplerate = librosa.load(io.BytesIO(audio_data), sr=None, res_type='soxr_hq')
+            sf.write(path, audio_wave, samplerate, subtype='PCM_24')
+            print("Sample rate: ", samplerate)
+        except Exception as e:
+            print(f'Errored when storing the original audio: {e}')
 
 

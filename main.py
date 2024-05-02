@@ -28,7 +28,7 @@ async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     """
     # Edge case of the message been edited
     if not update.message:
-        return 
+        return None
     
     # Obtain the user ID to know where to store its audio
     user_id = update.effective_user.id
@@ -84,6 +84,10 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     # and we don't need to preprocess it further.
     if has_face:
         files_in_dir = iu.count_directory_files()
+        # In case of failure, we will simply skip this image.
+        if files_in_dir < 0:
+            return None
+
         new_img_id = f'{IMAGE_DATA_PATH}image_{files_in_dir}.jpg'
 
         # NOTE: Saving the original file from internet without rescaling could be
@@ -118,7 +122,7 @@ def main():
     
     except Exception as db_error:
         print(f"Error initializing database: {db_error}")
-        return
+        return None
     
     # ====================================================================================== Start the SrVladyslav Bot
     try:
