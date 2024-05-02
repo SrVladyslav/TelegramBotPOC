@@ -1,6 +1,5 @@
 from data.database_handler import DatabaseHandler
 import numpy as np
-import uuid
 import cv2
 import os 
 
