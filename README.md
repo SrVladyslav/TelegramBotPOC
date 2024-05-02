@@ -35,7 +35,7 @@ In order to use the bot live, you need a Telegranm token, which is used to creat
 Follow the steps to obtain yours from scratch:
 
 1. Search for `BotFather` in the Telegram search section.
-2. Click on the `Start` button.`
+2. Click on the `Start` button.
 3. Type `/newbot` and press enter to create your own bot. Then you will be asked to provide the bot name and username. To choose a username, you sould know that it must end with the word `bot` or `_bot`.
 > **_NOTE:_** It is not possible to change the bot username later!
 4. If BotFather approves your username, you will be prompted with a message that contains `YOUR_TELEGRAM_BOT_TOKEN` in it, copy this token.
@@ -49,7 +49,7 @@ echo "TELEGRAM_BOT_TOKEN='<YOUR_TELEGRAM_BOT_TOKEN here>'" > .env
 ```
 python main.py
 ```
-Press Ctrl-C to stop.
+Press `Ctrl-C` to stop.
 
 ### Considerations before production 🤗
 - Implement a connection to a remote database (e.g. [RDS](https://aws.amazon.com/es/rds/) + [S3](https://aws.amazon.com/es/s3/)).
