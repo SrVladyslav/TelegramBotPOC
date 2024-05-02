@@ -10,7 +10,7 @@ Develop a Telegram Bot that can:
 
 ## Steps to start the bot
 
-## Clone this repo
+### Clone this repo
 Open your terminal and ho to the folder where you want to save this bot and type:
 ```
 git clone https://github.com/SrVladyslav/TelegramBotPOC.git
