@@ -99,6 +99,7 @@ Press Ctrl-C to stop.
  ┃ ┗ 📜__init__.py
  ┣ 📜.env
  ┣ 📜.gitignore
+ ┣ 📜audioVisualizer.ipynb                           # Contains some plots to check visually that some changes on the audio were made
  ┣ 📜dbVisualizer.ipynb                              # Contains GET SQLs with Pandas representation of the DB Tables
  ┣ 📜main.py
  ┣ 📜README.md
@@ -108,5 +109,5 @@ Press Ctrl-C to stop.
 
 ## External useful links
 - [python-telegram-bot](https://docs.python-telegram-bot.org/en/v21.1.1/index.html) documentation page.
-- [python-soundfile](https://python-soundfile.readthedocs.io/en/0.11.0/#) documentation page.
 - [librosa.load](https://librosa.org/doc/0.10.1/generated/librosa.load.html) was used to read the audio data and automatically resample to 16kHz.
+- [Haar Cascade](https://towardsdatascience.com/face-detection-with-haar-cascade-727f68dafd08) face detection explanation.
