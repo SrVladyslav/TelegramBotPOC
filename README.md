@@ -91,7 +91,9 @@ Press `Ctrl-C` to stop.
  ┃ ┃ ┗ 📜database_prod.db                            # DB Tables will be created after running python main.py
  ┃ ┣ 📂image_data                                    # The images which have some face on it will be stored here
  ┃ ┃ ┣ 📜.gitkeep
- ┃ ┃ ┗ 📜image_0.jpg
+ ┃ ┃ ┣ 📜image_0.jpg
+ ┃ ┃ ┣ ...
+ ┃ ┃ ┗ 📜image_N.jpg
  ┃ ┣ 📜database_handler.py                           # All the database SQL functions are here
  ┃ ┗ 📜__init__.py
  ┣ 📂docs
