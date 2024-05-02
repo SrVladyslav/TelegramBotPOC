@@ -12,15 +12,20 @@ class DatabaseHandler:
         """ Generates new UUID so can be used as ID en some table """
         return str(uuid.uuid4())
 
+    # =========================================================================================== CREATE
     def create_tables(self):
         """ 
-            This command creates a production DB if this not exist
+            This command creates a production DB if this does not exist
         """
         try:
             with sqlite3.connect(self._db_prod_path) as db_conn:
                 cursor = db_conn.cursor()
 
                 # Create the table for Users
+                # NOTE: Created with the intention to add some user information
+                # in the future while processing audio messages or, creating 
+                # other user related tables (e.g. Images table). To avoid 
+                # overloading the Audio table
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS Users (
                         u_id INTEGER PRIMARY KEY NOT NULL,
@@ -44,9 +49,12 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"Error creating tables: {e}")
 
-    # =========================================================================================== CREATE
     def postNewUser(self, user_id:int):
-        """Create new user with the given user_id in the DB if this does not exist"""
+        """Create new user with the given user_id in the DB if this does not exist
+        
+        Args:
+            user_id (int): The user ID which is also the Telegram UID.
+        """
         try:
             with sqlite3.connect(self._db_prod_path) as db_conn:
                 cursor = db_conn.cursor()
@@ -105,7 +113,7 @@ class DatabaseHandler:
 
         return a_msg_name
     
-    # GET: Just for check purposes ================================================================ 
+    # =========================================================================================== GET: Just for checking purposes
     def getUserAudioCount(self, user_id:int) -> int:
         """ Makes a GET request to the DB that returns the user's Audio messages number, 
             useful to obtain the next audio N for the audio name "audio_message_N"

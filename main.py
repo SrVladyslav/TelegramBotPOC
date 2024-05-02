@@ -4,8 +4,8 @@ from utils.image_utils import ImageUtils
 from dotenv import load_dotenv
 import os 
 
-from telegram import ForceReply, Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram import Update
+from telegram.ext import Application, ContextTypes, MessageHandler, filters
 
 # .env
 load_dotenv()
@@ -13,12 +13,10 @@ TELEGRAM_BOT_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN')
 IMAGE_DATA_PATH = './data/image_data/'
 
 # =========================================================================================== BOT FUNCTION HANDLERS
-async def audioDBCount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Check the DB Audio Count for your ID."""
-    db = DatabaseHandler()          
-    res = f'We have {db.getUserAudioCount(update.effective_user.id)} audios from you'              
-    await update.message.reply_text(res)
-
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Log the error and send a telegram message to notify the developer."""
+    # Log the error, also we can implement a dev notification.
+    print("An exception was raised while handling an update.")
 
 async def audio_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Receive an audio message, changes the sampling rate to 16kHz and 
@@ -99,13 +97,24 @@ async def image_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     else:
         await update.message.reply_text("Wow, thanks!")
 
+async def audioDBCount(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Development purposses only. Check the DB Audio Count for your ID.
+    
+    Args:
+        update (Update): This object represents an incoming update.
+        context (ContextTypes.DEFAULT_TYPE): Determines the type of the context argument.
+    """
+    db = DatabaseHandler()          
+    res = f'We have {db.getUserAudioCount(update.effective_user.id)} audios from you'              
+    await update.message.reply_text(res)
 
 # =========================================================================================== MAIN APP
 def main():
     # --------------------------------------------------------------------------------------- Database initialization
-    db = DatabaseHandler()                                                                  # Database functions
+    db = DatabaseHandler()
     try:
-        db.create_tables()                                                                  # Created tables: Users, Audios, Images               
+        # Create tables: Users, Audios, <Images - in case of being needed> 
+        db.create_tables()              
     
     except Exception as db_error:
         print(f"Error initializing database: {db_error}")
@@ -116,9 +125,11 @@ def main():
         print("Starting the SrVladyslav Bot")
         telegram_bot = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
         # ---------------------------------------------------------------------------------- Adding the bot handlers
-        # telegram_bot.add_handler(CommandHandler("adb", audioDBCount))                    # /adb   returns the Audio Db count for your ID, (HELPER)
-        telegram_bot.add_handler(MessageHandler(filters.VOICE, audio_message))             # Audio filtering
-        telegram_bot.add_handler(MessageHandler(filters.PHOTO, image_message))             # Image filtering
+        telegram_bot.add_handler(MessageHandler(filters.VOICE, audio_message))             # Audio filtering task
+        telegram_bot.add_handler(MessageHandler(filters.PHOTO, image_message))             # Image filtering task
+
+        telegram_bot.add_error_handler(error_handler)
+        # telegram_bot.add_handler(CommandHandler("adb", audioDBCount))                    # /adb   returns the Audio Db count for your ID, (Dev. HELPER)
         # ---------------------------------------------------------------------------------- Run the bot until Ctrl-C is pressed
         print("The bot is running... Press Ctrl-C to stop.")
         telegram_bot.run_polling(allowed_updates=Update.ALL_TYPES)
