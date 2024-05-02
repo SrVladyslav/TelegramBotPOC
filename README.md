@@ -85,7 +85,7 @@ Press Ctrl-C to stop.
  ┃ ┃ ┃ ┗ 📜audio_message_N.wav
  ┃ ┃ ┗ 📜.gitkeep
  ┃ ┣ 📂db
- ┃ ┃ ┗ 📜database_prod.db                            # Will be created after running python main.py
+ ┃ ┃ ┗ 📜database_prod.db                            # DB Tables will be created after running python main.py
  ┃ ┣ 📂image_data                                    # The images which have some face on it will be stored here
  ┃ ┃ ┣ 📜.gitkeep
  ┃ ┃ ┗ 📜image_0.jpg
@@ -109,3 +109,4 @@ Press Ctrl-C to stop.
 ## External useful links
 - [python-telegram-bot](https://docs.python-telegram-bot.org/en/v21.1.1/index.html) documentation page.
 - [python-soundfile](https://python-soundfile.readthedocs.io/en/0.11.0/#) documentation page.
+- [librosa.load](https://librosa.org/doc/0.10.1/generated/librosa.load.html) was used to read the audio data and automatically resample to 16kHz.
